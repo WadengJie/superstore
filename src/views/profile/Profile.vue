@@ -1,0 +1,125 @@
+<template>
+  <div>
+    <scroll class="content">
+      <ul>
+        <li>我的1</li>
+        <li>我的2</li>
+        <li>我的3</li>
+        <li>我的4</li>
+        <li>我的5</li>
+        <li>我的6</li>
+        <li>我的7</li>
+        <li>我的8</li>
+        <li>我的9</li>
+        <li>我的10</li>
+        <li>我的11</li>
+        <li>我的12</li>
+        <li>我的13</li>
+        <li>我的14</li>
+        <li>我的15</li>
+        <li>我的16</li>
+        <li>我的17</li>
+        <li>我的18</li>
+        <li>我的19</li>
+        <li>我的20</li>
+        <li>我的21</li>
+        <li>我的22</li>
+        <li>我的23</li>
+        <li>我的24</li>
+        <li>我的25</li>
+        <li>我的26</li>
+        <li>我的27</li>
+        <li>我的28</li>
+        <li>我的29</li>
+        <li>我的30</li>
+        <li>我的31</li>
+        <li>我的32</li>
+        <li>我的33</li>
+        <li>我的34</li>
+        <li>我的35</li>
+        <li>我的36</li>
+        <li>我的37</li>
+        <li>我的38</li>
+        <li>我的39</li>
+        <li>我的40</li>
+        <li>我的41</li>
+        <li>我的42</li>
+        <li>我的43</li>
+        <li>我的44</li>
+        <li>我的45</li>
+        <li>我的46</li>
+        <li>我的47</li>
+        <li>我的48</li>
+        <li>我的49</li>
+        <li>我的50</li>
+        <li>我的51</li>
+        <li>我的52</li>
+        <li>我的53</li>
+        <li>我的54</li>
+        <li>我的55</li>
+        <li>我的56</li>
+        <li>我的57</li>
+        <li>我的58</li>
+        <li>我的59</li>
+        <li>我的60</li>
+        <li>我的61</li>
+        <li>我的62</li>
+        <li>我的63</li>
+        <li>我的64</li>
+        <li>我的65</li>
+        <li>我的66</li>
+        <li>我的67</li>
+        <li>我的68</li>
+        <li>我的69</li>
+        <li>我的70</li>
+        <li>我的71</li>
+        <li>我的72</li>
+        <li>我的73</li>
+        <li>我的74</li>
+        <li>我的75</li>
+        <li>我的76</li>
+        <li>我的77</li>
+        <li>我的78</li>
+        <li>我的79</li>
+        <li>我的80</li>
+        <li>我的81</li>
+        <li>我的82</li>
+        <li>我的83</li>
+        <li>我的84</li>
+        <li>我的85</li>
+        <li>我的86</li>
+        <li>我的87</li>
+        <li>我的88</li>
+        <li>我的89</li>
+        <li>我的90</li>
+        <li>我的91</li>
+        <li>我的92</li>
+        <li>我的93</li>
+        <li>我的94</li>
+        <li>我的95</li>
+        <li>我的96</li>
+        <li>我的97</li>
+        <li>我的98</li>
+        <li>我的99</li>
+        <li>我的100</li>
+      </ul>
+  </scroll>
+  </div>
+</template>
+
+<script>
+import Scroll from 'components/common/scroll/Scroll'
+export default {
+  components: {
+    Scroll
+  }
+}
+</script>
+
+<style scoped>
+.content {
+  height: 300px;
+  background-color: coral;
+  overflow: hidden;
+}
+</style>
