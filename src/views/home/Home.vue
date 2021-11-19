@@ -91,7 +91,7 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
-    console.log('home created');
+    // console.log('home created');
   },
  mixins: [itemListenerMixin, backTopMixin],
   methods: {

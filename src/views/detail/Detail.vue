@@ -13,6 +13,7 @@
     </scroll>
     <detail-bottom-bar @addCart="addToCart"/>
     <back-top @click.native="backClick" v-show="showback"/>
+    <!-- <toast :message="message" :isShow="isShow"/> -->
   </div>
 </template>
 
@@ -28,11 +29,13 @@ import DetailBottomBar from 'views/detail/childComps/DetailBottomBar'
 
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
+// import Toast from 'components/common/toast/Toast'
 
 
 import { getDetail, getRecommend, Goods, Shop, GoodsParam } from 'network/detail'
 
 import { itemListenerMixin, backTopMixin } from 'common/mixin'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Detail',
@@ -46,8 +49,10 @@ export default {
       paramInfo: {},
       commentInfo: {},
       recommends: [],
-      themeTopYs: null,
-      currentIndex: 0   
+      themeTopYs: [],
+      currentIndex: 0,
+      // message: '' ,
+      // isShow: false
     }
   },
   components: {
@@ -60,7 +65,8 @@ export default {
     DetailCommentInfo,
     DetailBottomBar,
     Scroll,
-    GoodsList
+    GoodsList,
+    // Toast
   },
   created() {
     // 1.保存传入的iid
@@ -113,6 +119,7 @@ export default {
     this.$bus.$off('itemImageLoad', this.itemImageListener)
   },
   methods: {
+    ...mapActions(['addCart']),
     imageLoad() {
       this.$refs.scroll.refresh()
       this.themeTopYs = []
@@ -121,7 +128,7 @@ export default {
       this.themeTopYs.push(this.$refs.comment.$el.offsetTop || this.$refs.recommends.$el.offsetTop)
       this.themeTopYs.push(this.$refs.recommends.$el.offsetTop)
       this.themeTopYs.push(Number.MAX_VALUE)
-      console.log(this.themeTopYs);
+      // console.log(this.themeTopYs);
     },
     titleClick(index) {
       this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 500)
@@ -154,7 +161,22 @@ export default {
       // 将商品数据添加到购物车里
       // this.$store.cartList.push(product)
       // this.$store.commit('addCart', product)
-      this.$store.dispatch('addCart', product)
+
+      this.addCart(product).then(res => {
+        // this.isShow = true
+        // this.message = res
+
+        // setTimeout(() => {
+        //   this.isShow = false
+        //   this.message = ''
+        // }, 1500)
+        this.$toast.show(res, 1500)
+        console.log(this.$toast);
+      })
+
+      // this.$store.dispatch('addCart', product).then(res => {
+      //   console.log(res);
+      // })
     }
   }
 }

@@ -3,9 +3,10 @@
     <nav-bar class="cart-bar">
      <div slot="center">购物车({{length}})</div>
     </nav-bar>
-    <scroll class="content">
+    <scroll class="content" ref="scroll">
       <cart-list/>
     </scroll>
+    <cart-bottom-bar/>
   </div>
 </template>
 
@@ -13,19 +14,25 @@
 import { mapGetters } from 'vuex'
 import NavBar from 'components/common/navbar/NavBar'
 import Scroll from 'components/common/scroll/Scroll'
+
 import CartList from './childComps/CartList'
+import CartBottomBar from './childComps/CartBottomBar'
 
 export default {
   components: {
     NavBar,
     Scroll,
-    CartList
+    CartList,
+    CartBottomBar
   },
   computed: {
     // ...mapGetters(['cartLength'])
     ...mapGetters({
       length: 'cartLength'
     })
+  },
+  activated() {
+    this.$refs.scroll.refresh()
   }
 }
 </script>
@@ -42,7 +49,7 @@ export default {
     /* font-weight: 700; */
   }
   .content {
-    width: 100%;
-    height: calc(100vh - 44px - 49px);
+    height: calc(100vh - 44px - 49px - 40px);
+    overflow: hidden;
   }
 </style>

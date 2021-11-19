@@ -1,147 +1,179 @@
 <template>
-  <div class="wrapper" ref="aaa">
-    <ul class="content">
-      <button @click="btnClick">按钮</button>
-      <li>列表1</li>
-      <li>列表2</li>
-      <li>列表3</li>
-      <li>列表4</li>
-      <li>列表5</li>
-      <li>列表6</li>
-      <li>列表7</li>
-      <li>列表8</li>
-      <li>列表9</li>
-      <li>列表10</li>
-      <li>列表11</li>
-      <li>列表12</li>
-      <li>列表13</li>
-      <li>列表14</li>
-      <li>列表15</li>
-      <li>列表16</li>
-      <li>列表17</li>
-      <li>列表18</li>
-      <li>列表19</li>
-      <li>列表20</li>
-      <li>列表21</li>
-      <li>列表22</li>
-      <li>列表23</li>
-      <li>列表24</li>
-      <li>列表25</li>
-      <li>列表26</li>
-      <li>列表27</li>
-      <li>列表28</li>
-      <li>列表29</li>
-      <li>列表30</li>
-      <li>列表31</li>
-      <li>列表32</li>
-      <li>列表33</li>
-      <li>列表34</li>
-      <li>列表35</li>
-      <li>列表36</li>
-      <li>列表37</li>
-      <li>列表38</li>
-      <li>列表39</li>
-      <li>列表40</li>
-      <li>列表41</li>
-      <li>列表42</li>
-      <li>列表43</li>
-      <li>列表44</li>
-      <li>列表45</li>
-      <li>列表46</li>
-      <li>列表47</li>
-      <li>列表48</li>
-      <li>列表49</li>
-      <li>列表50</li>
-      <li>列表51</li>
-      <li>列表52</li>
-      <li>列表53</li>
-      <li>列表54</li>
-      <li>列表55</li>
-      <li>列表56</li>
-      <li>列表57</li>
-      <li>列表58</li>
-      <li>列表59</li>
-      <li>列表60</li>
-      <li>列表61</li>
-      <li>列表62</li>
-      <li>列表63</li>
-      <li>列表64</li>
-      <li>列表65</li>
-      <li>列表66</li>
-      <li>列表67</li>
-      <li>列表68</li>
-      <li>列表69</li>
-      <li>列表70</li>
-      <li>列表71</li>
-      <li>列表72</li>
-      <li>列表73</li>
-      <li>列表74</li>
-      <li>列表75</li>
-      <li>列表76</li>
-      <li>列表77</li>
-      <li>列表78</li>
-      <li>列表79</li>
-      <li>列表80</li>
-      <li>列表81</li>
-      <li>列表82</li>
-      <li>列表83</li>
-      <li>列表84</li>
-      <li>列表85</li>
-      <li>列表86</li>
-      <li>列表87</li>
-      <li>列表88</li>
-      <li>列表89</li>
-      <li>列表90</li>
-      <li>列表91</li>
-      <li>列表92</li>
-      <li>列表93</li>
-      <li>列表94</li>
-      <li>列表95</li>
-      <li>列表96</li>
-      <li>列表97</li>
-      <li>列表98</li>
-      <li>列表99</li>
-      <li>列表100</li>
-    </ul>
+  <div id="category">
+    <nav-bar class="navbar">
+      <div slot="center">分类</div>
+    </nav-bar>
+
+    <div class="category-content">
+      <scroll class="scroll-left">
+        <category-left :left-list="leftList" @leftClick="leftClick"/>
+      </scroll>
+      <tab-control 
+              :titles="['综合', '新品', '销量']" 
+              @tabClick="tabClick" 
+              class="tabControl"
+              v-show="isTabFixed"
+              ref="tabControl1"/>
+      <scroll class="scroll-right"
+              ref="scroll" 
+              @scroll="contentScroll"
+              :pull-up-load="true" 
+              :probe-type="3">
+        <category-right :right-list="rightList"/>
+        <tab-control :titles="['综合', '新品', '销量']" @tabClick="tabClick" ref="tabControl2"/>
+        <good-list :goods="showGoods"/>
+      </scroll>
+    </div>
   </div>
 </template>
 
 <script>
-import BSscroll from 'better-scroll'
+import NavBar from 'components/common/navbar/NavBar'
+import Scroll from 'components/common/scroll/Scroll'
+import TabControl from 'components/content/tabControl/TabControl'
+import GoodList from 'components/content/goods/GoodsList'
+
+import CategoryLeft from 'views/category/childComps/CategoryLeft'
+import CategoryRight from 'views/category/childComps/CategoryRight'
+
+import { itemListenerMixin } from 'common/mixin'
+
+import { getCategory, getSubCategory, getCategoryDetail } from 'network/category'
 export default {
+  name: 'Category',
   data() {
-    return { 
-      scroll: null
+    return {
+      leftList: [],
+      rightList: [],
+      goods: {
+        'new': [],
+        'sell': [],
+        'pop': []
+      },
+      currentType: 'pop',
+      isTabFixed: false,
+      tabOffsetTop: 0,
+      saveY : 0
     }
+  },
+  components: {
+    NavBar,
+    Scroll,
+    CategoryLeft,
+    CategoryRight,
+    TabControl,
+    GoodList
+  },
+  mixins: [itemListenerMixin],
+  destroyed() {
+    this.$bus.$off('itemImageLoad', this.itemImageListener)
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType]
+    }
+  },
+  activated() {
+    console.log(111);
+    this.$refs.scroll.refresh()
   },
   methods: {
-    btnClick() {
-      console.log('btnclick');
+    leftClick(index) {
+      this.getSubCategory(index)
+      this.$refs.scroll.scrollTo(0, this.saveY, 0)
+    },
+    tabClick(index) {
+      switch (index) {
+        case 0: 
+          this.currentType = 'pop'
+          break
+        case 1:
+          this.currentType = 'new'
+          break
+        case 2:
+          this.currentType = 'sell'
+          break
+      }
+      this.$refs.tabControl1.currentIndex = index
+      this.$refs.tabControl2.currentIndex = index
+    },
+    contentScroll(pos) {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
+      this.isTabFixed = (-pos.y) > this.tabOffsetTop
+    },
+
+    // 网络请求相关的
+    getCategory() {
+      getCategory().then(res => {
+        this.leftList = res.data.category.list
+
+      // 调用一次getSubCategory进入分类显示第一个数据
+      this.getSubCategory(0)
+      })
+    },
+    getSubCategory(index) {
+      this.currentIndex = index
+      const maitKey = this.leftList[index].maitKey;
+      getSubCategory(maitKey).then(res => {
+        this.rightList = res.data.list
+      })
+
+      // 一创建就调用三个数据
+      this.getCategoryDetail('new')
+      this.getCategoryDetail('sell')
+      this.getCategoryDetail('pop')
+    },
+    getCategoryDetail(type) {
+      const miniWallkey = this.leftList[this.currentIndex].miniWallkey
+      getCategoryDetail(miniWallkey, type).then(res => {
+        this.goods[type] = res
+        // console.log(res);
+      })
     }
   },
-  mounted() {
-    this.scroll = new BSscroll(document.querySelector('.wrapper'), {
-      probeType: 3,
-      click: false,
-      pullUpLoad: true
-    })
-
-    this.scroll.on('scroll', (pos) => {
-      console.log(pos);
-    })
-
-    this.scroll.on('pullingUp', () => {
-      console.log('上拉加载更多');
-    })
+  created() {
+    this.getCategory()
   }
 }
 </script>
 
 <style scoped>
-.wrapper {
-  height: 150px;
-  background-color: red;
-  /* overflow: hidden; */
-  overflow-y: scroll;
-}
+  #category {
+    height: 100vh;
+  }
+
+  .navbar {
+    background-color: var(--color-tint);
+    color: #fff;
+  }
+
+  .category-content {
+    display: flex;
+    height: calc(100% - 44px - 49px);
+  }
+  
+  .scroll-left {
+    width: 30%;
+    height: 100%;
+    /* background-color: pink; */
+    background-color: #f6f6f4;
+    overflow: hidden;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .scroll-right {
+    width: 70%;
+    height: 100%;
+    /* background-color: pink; */
+    overflow: hidden;
+  }
+  
+  .tabControl{
+    position: fixed;
+    top: 44px;
+    left: 30%;
+    right: 0;
+    z-index: 9;
+  }
 </style>

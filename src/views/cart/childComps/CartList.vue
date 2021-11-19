@@ -1,12 +1,20 @@
 <template>
   <div class="cart-list">
-    <h2><div v-for="item in cartList" :key="item.id">{{item}}</div></h2>
+    <cart-list-item 
+    v-for="(item, index) in cartList" 
+    :key="index" 
+    :itemInfo="item"/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+
+import CartListItem from './CartListItem'
 export default {
+  components: {
+    CartListItem
+  },
   computed: {
     ...mapGetters(['cartList'])
   }
